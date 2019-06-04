@@ -48,16 +48,17 @@ class MainActivity : AppCompatActivity() {
         tvIncorrectCount.text = getString(R.string.incorrect_count_label, incorrectCount)
 
         btnTrue.setOnClickListener {
-            checkAnswer(questions[currentIndex])
+            checkAnswer(questions[currentIndex], true)
         }
 
         btnFalse.setOnClickListener {
-            checkAnswer(questions[currentIndex])
+            checkAnswer(questions[currentIndex], false)
         }
     }
 
-    private fun checkAnswer(question: Question) {
-        if (question.answer.toString() == "true") {
+    private fun checkAnswer(question: Question, answerButton: Boolean) {
+        val correctAnswer = question.answer
+        if (correctAnswer == answerButton) {
             correctCount++
             tvCorrectCount.text = getString(R.string.correct_count_label, correctCount)
             currentIndex = Random.nextInt(0, 5)
