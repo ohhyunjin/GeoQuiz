@@ -2,11 +2,15 @@ package com.example.geoquiz
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
+
+    // constants
+    private val TAG = "MainActivity"
 
     // widgets
     private lateinit var tvQuestion: TextView
@@ -24,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d(TAG, "onCreate")
 
         tvQuestion = findViewById(R.id.tv_question)
         btnTrue = findViewById(R.id.btn_true)
