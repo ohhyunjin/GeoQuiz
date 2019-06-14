@@ -9,6 +9,10 @@
     <string name="answer_false">Incorrect</string>
     <string name="correct_count_label">Correct: %1$d</string>
     <string name="incorrect_count_label">Incorrect: %1$d</string>
+    <string name="name_label">Name</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="btn_signup_text">Sign up</string>
     <!-- endregion -->
 
 </resources>
