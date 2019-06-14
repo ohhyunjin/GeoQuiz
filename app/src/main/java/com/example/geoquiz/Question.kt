@@ -1,3 +1,3 @@
 package com.example.geoquiz
 
-class Question(var questionTextId: Int, var answer: Boolean)
+class Question(var questionText: String, var answer: Boolean)

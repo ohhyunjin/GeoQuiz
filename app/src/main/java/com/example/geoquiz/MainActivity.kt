@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +22,10 @@ class MainActivity : AppCompatActivity() {
     private var incorrectCount = 0
     var currentIndex: Int = Random.nextInt(0, 5)
 
+    // misc
+    private lateinit var questionsList : MutableList<Question>
+    private lateinit var questions : Array<Question>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,19 +37,33 @@ class MainActivity : AppCompatActivity() {
         tvCorrectCount = findViewById(R.id.tv_correct_count)
         tvIncorrectCount = findViewById(R.id.tv_incorrect_count)
 
-
         currentIndex = Random.nextInt(0, 5)
 
-        val questions = arrayOf(
-            Question(R.string.question_australia, true),
-            Question(R.string.question_oceans, true),
-            Question(R.string.question_mideast, false),
-            Question(R.string.question_africa, false),
-            Question(R.string.question_americas, true),
-            Question(R.string.question_asia, true)
-        )
+        val db = FirebaseFirestore.getInstance()
 
-        tvQuestion.text = getString(questions[currentIndex].questionTextId)
+        db.collection("questions")
+            .get()
+            .addOnCompleteListener { task ->
+                questionsList = mutableListOf()
+
+                if (task.isSuccessful) {
+                    task.result!!.forEach { document ->
+                        questionsList.add(
+                            Question(document.data["question"].toString(),
+                                document.data["answer"].toString().toBoolean()
+                            )
+                        )
+                    }
+
+                    questions = questionsList.toTypedArray()
+
+                    tvQuestion.text = questions[currentIndex].questionText
+
+                } else {
+                    Toast.makeText(this, "Couldn't retrieve data", Toast.LENGTH_SHORT).show()
+                }
+            }
+
         tvCorrectCount.text = getString(R.string.correct_count_label, correctCount)
         tvIncorrectCount.text = getString(R.string.incorrect_count_label, incorrectCount)
 
@@ -62,12 +82,12 @@ class MainActivity : AppCompatActivity() {
             correctCount++
             tvCorrectCount.text = getString(R.string.correct_count_label, correctCount)
             currentIndex = Random.nextInt(0, 5)
-            tvQuestion.text = getString(question.questionTextId)
+            tvQuestion.text = question.questionText//getString(question.questionTextId)
         } else {
             incorrectCount++
             tvIncorrectCount.text = getString(R.string.incorrect_count_label, incorrectCount)
             currentIndex = Random.nextInt(0, 5)
-            tvQuestion.text = getString(question.questionTextId)
+            tvQuestion.text = question.questionText//getString(question.questionTextId)
         }
     }
 }
