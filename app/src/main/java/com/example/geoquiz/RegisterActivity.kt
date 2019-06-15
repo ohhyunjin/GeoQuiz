@@ -26,6 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        mAuth = FirebaseAuth.getInstance()
         val currentUser : FirebaseUser? = mAuth.currentUser
 
         if (currentUser != null) {
