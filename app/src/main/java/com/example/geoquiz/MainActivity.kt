@@ -82,12 +82,12 @@ class MainActivity : AppCompatActivity() {
             correctCount++
             tvCorrectCount.text = getString(R.string.correct_count_label, correctCount)
             currentIndex = Random.nextInt(0, 5)
-            tvQuestion.text = question.questionText//getString(question.questionTextId)
+            tvQuestion.text = question.questionText
         } else {
             incorrectCount++
             tvIncorrectCount.text = getString(R.string.incorrect_count_label, incorrectCount)
             currentIndex = Random.nextInt(0, 5)
-            tvQuestion.text = question.questionText//getString(question.questionTextId)
+            tvQuestion.text = question.questionText
         }
     }
 }
