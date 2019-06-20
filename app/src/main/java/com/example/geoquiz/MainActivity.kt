@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     // counters
     private var correctCount = 0
     private var incorrectCount = 0
-    var currentIndex: Int = Random.nextInt(0, 5)
+    var currentIndex: Int = 0
 
     // misc
     private lateinit var questionsList : MutableList<Question>
@@ -36,8 +35,6 @@ class MainActivity : AppCompatActivity() {
         btnFalse = findViewById(R.id.btn_false)
         tvCorrectCount = findViewById(R.id.tv_correct_count)
         tvIncorrectCount = findViewById(R.id.tv_incorrect_count)
-
-        currentIndex = Random.nextInt(0, 5)
 
         val db = FirebaseFirestore.getInstance()
 
@@ -78,16 +75,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAnswer(question: Question, answerButton: Boolean) {
         val correctAnswer = question.answer
+
+        // if answer is correct
         if (correctAnswer == answerButton) {
-            correctCount++
-            tvCorrectCount.text = getString(R.string.correct_count_label, correctCount)
-            currentIndex = Random.nextInt(0, 5)
-            tvQuestion.text = question.questionText
-        } else {
-            incorrectCount++
-            tvIncorrectCount.text = getString(R.string.incorrect_count_label, incorrectCount)
-            currentIndex = Random.nextInt(0, 5)
-            tvQuestion.text = question.questionText
+            if (currentIndex == (questions.size - 1)) {
+                correctCount++
+                tvCorrectCount.text = getString(R.string.correct_count_label, correctCount)
+                tvQuestion.text = question.questionText
+                Toast.makeText(this, "This was the last question", Toast.LENGTH_SHORT).show()
+            } else {
+                correctCount++
+                tvCorrectCount.text = getString(R.string.correct_count_label, correctCount)
+                currentIndex++
+                tvQuestion.text = questions[currentIndex].questionText
+            }
+        }
+
+        // if answer is incorrect
+        else {
+            if (currentIndex == (questions.size - 1)) {
+                incorrectCount++
+                tvIncorrectCount.text = getString(R.string.incorrect_count_label, incorrectCount)
+                tvQuestion.text = question.questionText
+                Toast.makeText(this, "This was the last question", Toast.LENGTH_SHORT).show()
+            } else {
+                incorrectCount++
+                tvIncorrectCount.text = getString(R.string.incorrect_count_label, incorrectCount)
+                currentIndex++
+                tvQuestion.text = questions[currentIndex].questionText
+            }
         }
     }
 }
